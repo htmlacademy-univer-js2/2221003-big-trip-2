@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Вадим Рощин](https://up.htmlacademy.ru/univer-js2/2/user/2221003).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Лепёшкин](https://htmlacademy.ru/profile/spearance).
 
 ---
 
