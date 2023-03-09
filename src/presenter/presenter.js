@@ -10,15 +10,17 @@ export default class BoardPresenter {
     this.boardComponent = new TripEventsView();
   }
 
-  init(tripContainer) {
+  init(tripContainer, pointsModel) {
     this.tripContainer = tripContainer;
+    this.pointsModel = pointsModel;
+    this.tripPoints = [...this.pointsModel.getPoint()];
 
     render(new EditFormView(), this.boardComponent.getElement());
     render(new SortView(), this.tripContainer);
     render(this.boardComponent, this.tripContainer);
 
-    for (let i = 0; i < 3; i++) {
-      render(new WaypointView(), this.boardComponent.getElement());
+    for (let i = 0; i < this.tripPoints.length; i++) {
+      render(new WaypointView(this.tripPoints[i]), this.boardComponent.getElement());
     }
 
     render(new CreateFormView(), this.boardComponent.getElement());
