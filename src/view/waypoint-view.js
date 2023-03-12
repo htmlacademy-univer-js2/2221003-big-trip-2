@@ -1,60 +1,37 @@
 import { createElement } from '../render.js';
 import dayjs from 'dayjs';
 
-const renderOffers = (newOffers, offers) => {
-  let result = '';
-  newOffers.forEach((offer) => {
-    if (offers.includes(offer.id)) {
-      result = `${result}<li class="event__offer">
-                         <span class="event__offer-title">${offer.title}</span>
-                         &plus;&euro;&nbsp;
-                         <span class="event__offer-price">${offer.price}</span>
-                         </li>`;
-    }
-  });
-  return result;
-};
-
-function DateDifference(dateFrom, dateTo) {
-  let dateDiff = dayjs.duration(dateTo.diff(dateFrom, 'millisecond'));
-
-  if (dateDiff.hours() > 0) {
-    dateDiff = dateDiff.format('HH[H] mm[M]');
-  } else {
-    dateDiff = dateDiff.format('mm[M]');
-  }
-  return dateDiff;
-}
-
-const createWaypointTemplate = (point, destinations, offers) => {
-  const { type, dateFrom, dateTo, basePrice, destinationId, offerIds, isFavorite } = point;
-
-  const pointTypeOffer = offers.find((offer) => offer.type === type);
-  const dateDiff = DateDifference(dateFrom, dateTo);
+const createWaypointTemplate = (point) => {
+  const getDate = (date) => dayjs(date).format('D MMMM');
+  const getTime = (date) => dayjs(date).format('hh:mm');
 
   return `<li class="trip-events__item">
     <div class="event">
-      <time class="event__date" datetime="${dateFrom.format('YYYY-MM-DD')}">${dateFrom.format('MMM DD')}</time>
+      <time class="event__date" datetime="2019-03-18">${getDate(point['dateTo'])}</time>
       <div class="event__type">
-        <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event ${type} icon">
+        <img class="event__type-icon" width="42" height="42" src="img/icons/${point['type']}.png" alt="Event type icon">
       </div>
-      <h3 class="event__title">${type} ${destinations[destinationId].name}</h3>
+      <h3 class="event__title">${point['type']} ${point['destination']['name']}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="${dateFrom}">${dateFrom.format('HH:mm')}</time>
+          <time class="event__start-time" datetime="${point['dateFrom']}">${(getDate(point['dateTo']) === (getDate(point['dateFrom'])) ? getTime(point['dateFrom']) : getDate(point['dateFrom']))}</time>
           &mdash;
-          <time class="event__end-time" datetime="${dateTo}">${dateTo.format('HH:mm')}</time>
+          <time class="event__end-time" datetime="${point['dateTo']}">${(getDate(point['dateTo']) === (getDate(point['dateFrom'])) ? getTime(point['dateTo']) : getDate(point['dateTo']))}</time>
         </p>
-        <p class="event__duration">${dateDiff}</p>
+        <p class="event__duration">30M</p>
       </div>
       <p class="event__price">
-        &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
+        &euro;&nbsp;<span class="event__price-value">${point['basePrice']}</span>
       </p>
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">
-      ${renderOffers(pointTypeOffer.offers, offerIds)}
+        <li class="event__offer">
+          <span class="event__offer-title">${point['offers']['title']}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${point['offers']['price']}</span>
+        </li>
       </ul>
-      <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
+      <button class="event__favorite-btn ${point['isFavorite'] ? 'event__favorite-btn--active' : ''}" type="button">
         <span class="visually-hidden">Add to favorite</span>
         <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
           <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z" />
@@ -68,14 +45,12 @@ const createWaypointTemplate = (point, destinations, offers) => {
 };
 
 export default class WaypointView {
-  constructor(point, destination, offers) {
+  constructor(point) {
     this.point = point;
-    this.destination = destination;
-    this.offers = offers;
   }
 
   getTemplate() {
-    return createWaypointTemplate(this.point, this.destination, this.offers);
+    return createWaypointTemplate(this.point);
   }
 
   getElement() {

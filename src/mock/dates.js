@@ -2,8 +2,8 @@ import dayjs from 'dayjs';
 import { getRandomPositiveInteger } from '../utils';
 
 const getRandomDate = () => dayjs()
-  .add(getRandomPositiveInteger(1, 3), 'day')
-  .add(getRandomPositiveInteger(1, 10), 'hour')
+  .add(getRandomPositiveInteger(1, 7), 'day')
+  .add(getRandomPositiveInteger(1, 23), 'hour')
   .add(getRandomPositiveInteger(1, 59), 'minute');
 
 const createRandomDates = () => {

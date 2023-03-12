@@ -1,7 +1,5 @@
 const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-const OFFER_TITLES = ['Upgrade to a business class', 'Order Uber', 'Add lunch'];
-
-const POINTS_COUNT = 20;
+const OFFER_TITLES = ['Upgrade to a business class', 'Order Uber', 'Add lunch', 'Order train'];
 
 const DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -18,9 +16,14 @@ const DESCRIPTIONS = [
 
 const DESTINATIONS_NAMES = ['Ekaterinburg', 'Chelyabinsk', 'Berezovski', 'Moscow', 'Saint-Petersburg', 'Kazan', 'Toronto', 'Washington', 'Raleigh', 'Paris', 'Rim'];
 
-const Price = {
-  MIN: 100,
-  MAX: 4000
+const offerPrice = {
+  MIN: 10,
+  MAX: 50
 };
 
-export { POINT_TYPES, OFFER_TITLES, DESCRIPTIONS, DESTINATIONS_NAMES, POINTS_COUNT, Price };
+const tripPrice = {
+  MIN: 100,
+  MAX: 1500
+};
+
+export { POINT_TYPES, OFFER_TITLES, DESCRIPTIONS, DESTINATIONS_NAMES, tripPrice, offerPrice };

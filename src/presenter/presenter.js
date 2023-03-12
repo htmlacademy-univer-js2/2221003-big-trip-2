@@ -5,23 +5,24 @@ import WaypointView from '../view/waypoint-view.js';
 import TripEventsView from '../view/trip-events-view.js';
 
 export default class TripPresenter {
-  constructor(tripContainer) {
+  constructor() {
     this.eventsList = new TripEventsView();
-    this.tripContainer = tripContainer;
   }
 
-  init(pointsModel) {
+  init(tripContainer, pointsModel) {
+    this.tripContainer = tripContainer;
     this.pointsModel = pointsModel;
-    this.boardPoints = [...this.pointsModel.getPoints()];
-    this.destinations = [...this.pointsModel.getDestinations()];
-    this.offers = [...this.pointsModel.getOffers()];
+    this.tripPoints = [...this.pointsModel.getPoint()];
+
+    //  this.destinations = [...this.pointsModel.getDestinations()];
+    //  this.offers = [...this.pointsModel.getOffers()];
 
     render(new SortView(), this.tripContainer);
     render(this.eventsList, this.tripContainer);
-    render(new EditFormView(this.boardPoints[0], this.destinations, this.offers), this.eventsList.getElement());
+    render(new EditFormView(this.tripPoints[0]), this.eventsList.getElement());
 
-    for (const point of this.boardPoints) {
-      render(new WaypointView(point, this.destinations, this.offers), this.eventsList.getElement());
+    for (let i = 0; i < this.tripPoints.length; i++) {
+      render(new WaypointView(this.tripPoints[i]), this.eventsList.getElement());
     }
   }
 }
