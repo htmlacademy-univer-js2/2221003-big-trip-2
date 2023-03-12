@@ -31,7 +31,7 @@ const createSortTemplate = () => (
 
 export default class SortView {
   getTemplate() {
-    return createSortTemplate;
+    return createSortTemplate();
   }
 
   getElement() {

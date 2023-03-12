@@ -1,82 +1,54 @@
 import { getRandomArrayElement, getRandomPositiveInteger } from '../utils';
 import { createRandomDates } from './dates';
+import { POINT_TYPES, DESCRIPTIONS, DESTINATIONS_NAMES, Price, POINTS_COUNT } from './constants';
 
-const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-const OFFER_TITLES = ['Upgrade to a business class', 'Order Uber'];
-const DESCRIPTIONS = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  'Cras aliquet varius magna, non porta ligula feugiat eget.',
-  'Fusce tristique felis at fermentum pharetra.',
-  'Aliquam id orci ut lectus varius viverra.',
-  'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
-  'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.',
-  'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.',
-  'Sed sed nisi sed augue convallis suscipit in sed felis.',
-  'Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus.',
-  'In rutrum ac purus sit amet tempus.'
-];
-const NAMES = ['Ekaterinburg', 'Chelyabinsk', 'Berezovski', 'Moscow', 'Saint-Petersburg', 'Kazan', 'Toronto', 'Washington', 'Raleigh', 'Paris', 'Rim'];
-
-const MIN_OFFER_PRICE = 20;
-const MAX_OFFER_PRICE = 200;
-
-const MIN_PRICE = 100;
-const MAX_PRICE = 4000;
-
-const createDestination = (index) => ({
-  id: index + 1,
+const createPicture = () => ({
+  src: `http://picsum.photos/248/152?r=${getRandomPositiveInteger(0, 10)}`,
   description: getRandomArrayElement(DESCRIPTIONS),
-  name: getRandomArrayElement(NAMES),
-  pictures: [
-    {
-      src: `http://picsum.photos/248/152?r=${getRandomPositiveInteger(1, 100)}`,
-      description: getRandomArrayElement(DESCRIPTIONS)
-    }
-  ]
 });
 
-const createOffer = (index) => ({
-  id: index + 1,
-  title: getRandomArrayElement(OFFER_TITLES),
-  price: getRandomPositiveInteger(MIN_OFFER_PRICE, MAX_OFFER_PRICE)
+const createDestination = (id) => ({
+  id,
+  description: getRandomArrayElement(DESCRIPTIONS),
+  name: DESTINATIONS_NAMES[id],
+  pictures: Array.from({ length: 4 }, createPicture)
 });
 
-const createOfferByType = () => ({
-  type: getRandomArrayElement(POINT_TYPES),
-  offers: Array.from({ length: getRandomPositiveInteger(3, 8) }, (value, index) => createOffer(index))
+const getDestinations = () => Array.from({ length: DESTINATIONS_NAMES.length }).map((value, index) => createDestination(index));
+
+const createOffer = (id, pointType) => ({
+  id,
+  title: `offer for ${pointType}`, //getRandomArrayElement(OFFER_TITLES),
+  price: getRandomPositiveInteger(Price.MIN, Price.MAX)
 });
 
-const offersByType = Array.from({ length: 10 }, createOfferByType);
-const destinations = Array.from({ length: getRandomPositiveInteger(1, 5) }, (value, index) => createDestination(index));
+const createOffersByType = (pointType) => ({
+  type: pointType,
+  offers: Array.from({ length: getRandomPositiveInteger(1, 4) }).map((value, index) => createOffer(index + 1, pointType))
+});
 
-const getRandomIdsArray = () => {
-  const offers = getRandomArrayElement(offersByType).offers;
-  const ids = [];
-  const lengthOfArray = getRandomPositiveInteger(1, offers.length);
-  while (ids.length < lengthOfArray) {
-    const element = getRandomPositiveInteger(0, offers.length);
-    if (!ids.includes(element)) {
-      ids.push(element);
-    }
-  }
-  return ids;
-};
+const getOffersByType = () => Array.from({ length: POINT_TYPES.length }).map((value, index) => createOffersByType(POINT_TYPES[index]));
 
-const createPoint = (count) => {
+const offersByType = getOffersByType();
+const destinations = getDestinations();
+
+const createPoint = (id) => {
+  const offersByTypePoint = getRandomArrayElement(offersByType);
+  const allOfferIdsByTypePoint = offersByTypePoint.offers.map((offer) => offer.id);
   const randomDates = createRandomDates();
 
   return {
-    basePrice: getRandomPositiveInteger(MIN_PRICE, MAX_PRICE),
+    basePrice: getRandomPositiveInteger(Price.MIN, Price.MAX),
     dateFrom: randomDates.dateFrom,
     dateTo: randomDates.dateTo,
     destination: getRandomArrayElement(destinations).id,
-    id: count,
+    id,
     isFavorite: Boolean(getRandomPositiveInteger(0, 1)),
-    offers: getRandomIdsArray(),
+    offers: Array.from({ length: getRandomPositiveInteger(0, allOfferIdsByTypePoint.length) }).map(() => allOfferIdsByTypePoint[getRandomPositiveInteger(0, allOfferIdsByTypePoint.length - 1)]),
     type: getRandomArrayElement(POINT_TYPES)
   };
 };
 
-const createMockPoints = (count) => Array.from({ length: count }, (value, index) => createPoint(index));
+const getMockPoints = () => Array.from({ length: POINTS_COUNT }).map((value, index) => createPoint(index + 1));
 
-export { createMockPoints, destinations, offersByType };
+export { getMockPoints, getDestinations, getOffersByType };

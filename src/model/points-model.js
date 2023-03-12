@@ -1,7 +1,23 @@
-import { createMockPoints } from "../mock/task";
-
 export default class PointsModel {
-  points = Array.from({ length: 10 }, createMockPoints);
+  constructor() {
+    this.points = [];
+  }
 
-  getPoints = () => this.points;
+  init(points, destinations, offers) {
+    this.points = points;
+    this.destinations = destinations;
+    this.offers = offers;
+  }
+
+  getPoints() {
+    return this.points;
+  }
+
+  getDestinations() {
+    return this.destinations;
+  }
+
+  getOffers() {
+    return this.offers;
+  }
 }
