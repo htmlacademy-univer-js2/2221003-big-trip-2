@@ -14,9 +14,6 @@ export default class TripPresenter {
     this.pointsModel = pointsModel;
     this.tripPoints = [...this.pointsModel.getPoint()];
 
-    //  this.destinations = [...this.pointsModel.getDestinations()];
-    //  this.offers = [...this.pointsModel.getOffers()];
-
     render(new SortView(), this.tripContainer);
     render(this.eventsList, this.tripContainer);
     render(new EditFormView(this.tripPoints[0]), this.eventsList.getElement());
