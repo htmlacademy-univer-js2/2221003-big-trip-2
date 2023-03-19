@@ -13,7 +13,6 @@ export default class TripPresenter {
   #tripPoints = [];
 
   constructor() {
-    // this.eventsList = new TripEventsView();
     this.#pointsList = new TripEventsView();
   }
 
@@ -24,7 +23,6 @@ export default class TripPresenter {
 
     render(new SortView(), this.#tripContainer);
     render(this.#pointsList, this.#tripContainer);
-    // render(new EditFormView(this.#tripPoints[0]), this.#pointsList.element);
 
     for (let i = 0; i < this.#tripPoints.length; i++) {
       this.#renderPoints(this.#tripPoints[i]);
