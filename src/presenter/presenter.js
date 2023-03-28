@@ -41,20 +41,20 @@ export default class TripPresenter {
     const pointComponent = new WaypointView(point);
     const pointEditComponent = new EditFormView(point);
 
-    const onEscKeyDown = (evt) => {
-      if (isEscKeyDown) {
-        evt.preventDefault();
-        replaceFormToPoint();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
     const replacePointToForm = () => {
       this.#pointsList.element.replaceChild(pointEditComponent.element, pointComponent.element);
     };
 
     const replaceFormToPoint = () => {
       this.#pointsList.element.replaceChild(pointComponent.element, pointEditComponent.element);
+    };
+
+    const onEscKeyDown = (evt) => {
+      if (isEscKeyDown) {
+        evt.preventDefault();
+        replaceFormToPoint();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
     };
 
     pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
@@ -73,6 +73,6 @@ export default class TripPresenter {
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    render(pointComponent, this.#pointsList.element)
-  }
+    render(pointComponent, this.#pointsList.element);
+  };
 }
