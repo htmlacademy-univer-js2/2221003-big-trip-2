@@ -1,10 +1,11 @@
-import { render } from '../render.js';
+import { render, replace } from '../framework/render.js';
 import SortView from '../view/sort-view.js';
 import EditFormView from '../view/edit-form-view.js';
 import WaypointView from '../view/waypoint-view.js';
 import TripEventsView from '../view/trip-events-view.js';
 import NoPointView from '../view/no-point-view.js';
 import { isEscKeyDown } from '../utils.js';
+
 
 export default class TripPresenter {
   #tripContainer = null;
@@ -41,6 +42,14 @@ export default class TripPresenter {
     const pointComponent = new WaypointView(point);
     const pointEditComponent = new EditFormView(point);
 
+    const replacePointToForm = () => {
+      replace(pointEditComponent, pointComponent);
+    };
+
+    const replaceFormToPoint = () => {
+      replace(pointComponent, pointEditComponent);
+    };
+
     const onEscKeyDown = (evt) => {
       if (isEscKeyDown) {
         evt.preventDefault();
@@ -49,30 +58,26 @@ export default class TripPresenter {
       }
     };
 
-    const replacePointToForm = () => {
-      this.#pointsList.element.replaceChild(pointEditComponent.element, pointComponent.element);
-    };
-
-    const replaceFormToPoint = () => {
-      this.#pointsList.element.replaceChild(pointComponent.element, pointEditComponent.element);
-    };
-
-    pointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    pointComponent.setEditClickHandler(() => {
       replacePointToForm();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    // pointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    //   replaceFormToPoint();
+    //   document.removeEventListener('keydown', onEscKeyDown);
+    // });
+
+    pointEditComponent.setCloseClickHandler(() => {
       replaceFormToPoint();
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    pointEditComponent.element.querySelector('form').addEventListener('submit', (evt) => {
-      evt.preventDefault();
+    pointEditComponent.setFormSubmitHandler(() => {
       replaceFormToPoint();
       document.removeEventListener('keydown', onEscKeyDown);
     });
 
-    render(pointComponent, this.#pointsList.element)
-  }
+    render(pointComponent, this.#pointsList.element);
+  };
 }
