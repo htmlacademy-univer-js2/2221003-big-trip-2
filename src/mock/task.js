@@ -1,4 +1,4 @@
-import { getRandomArrayElement, getRandomPositiveInteger } from '../utils';
+import { getRandomArrayElement, getRandomPositiveInteger } from '../utils/common';
 import { createRandomDates } from './dates';
 import { POINT_TYPES, DESCRIPTIONS, DESTINATIONS_NAMES, tripPrice, offerPrice, OFFER_TITLES } from './constants';
 
