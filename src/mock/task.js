@@ -1,6 +1,7 @@
 import { getRandomArrayElement, getRandomPositiveInteger } from '../utils/common';
 import { createRandomDates } from './dates';
 import { POINT_TYPES, DESCRIPTIONS, DESTINATIONS_NAMES, tripPrice, offerPrice, OFFER_TITLES } from './constants';
+import { nanoid } from 'nanoid';
 
 const createPicture = () => ({
   src: `http://picsum.photos/248/152?r=${getRandomPositiveInteger(0, 10)}`,
@@ -20,14 +21,14 @@ const createOffer = (id) => ({
   price: getRandomPositiveInteger(offerPrice.MIN, offerPrice.MAX)
 });
 
-const createPoint = (id) => {
+const createPoint = () => {
   const randomDates = createRandomDates();
   return {
     basePrice: getRandomPositiveInteger(tripPrice.MIN, tripPrice.MAX),
     dateFrom: randomDates.dateFrom,
     dateTo: randomDates.dateTo,
     destination: createDestination(),
-    id,
+    id: nanoid(),
     isFavorite: Boolean(getRandomPositiveInteger(0, 1)),
     offers: createOffer(),
     type: getRandomArrayElement(POINT_TYPES)
