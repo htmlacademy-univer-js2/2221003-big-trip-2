@@ -1,5 +1,5 @@
 import { render } from './render.js';
-import TripPresenter from './presenter/presenter.js';
+import TripPresenter from './presenter/board-presenter.js';
 import FilterView from './view/filter-view.js';
 import PointsModel from './model/points-model.js';
 import { generateFilter } from './mock/filter.js';
