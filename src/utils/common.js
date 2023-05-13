@@ -6,6 +6,10 @@ const getRandomPositiveInteger = (min, max) => {
   }
 };
 
+const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
+
+const isEscKeyDown = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+
 const updateItem = (items, update) => {
   const index = items.findIndex((item) => item.id === update.id);
 
@@ -20,8 +24,10 @@ const updateItem = (items, update) => {
   ];
 };
 
-const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
+const doCapitalizeString = (string) => {
+  const capFirstString = string[0].toUpperCase();
+  const restOfString = string.slice(1);
+  return capFirstString + restOfString;
+};
 
-const isEscKeyDown = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
-
-export { getRandomPositiveInteger, updateItem, getRandomArrayElement, isEscKeyDown };
+export { getRandomPositiveInteger, updateItem, getRandomArrayElement, isEscKeyDown, doCapitalizeString };
