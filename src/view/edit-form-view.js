@@ -3,6 +3,9 @@ import { POINT_TYPES } from '../mock/constants.js';
 import { getDateTime } from '../utils/point.js';
 import { doCapitalizeString } from '../utils/common.js';
 import dayjs from 'dayjs';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 const renderDestinationPictures = (pictures) => {
   let result = '';
@@ -66,7 +69,6 @@ const createEditFormTemplate = (point, destinations, offers) => {
           <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event ${type} icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
-
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
@@ -74,7 +76,6 @@ const createEditFormTemplate = (point, destinations, offers) => {
           </fieldset>
         </div>
       </div>
-
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-${destinationId}">
         ${type}
@@ -84,9 +85,7 @@ const createEditFormTemplate = (point, destinations, offers) => {
           ${renderDestinationNames(destinations)}
         </datalist>
       </div>
-
       ${renderEditingPointDateTemplate(dateFrom, dateTo)}
-
       <div class="event__field-group  event__field-group--price">
         <label class="event__label" for="event-price-1">
           <span class="visually-hidden">Price</span>
@@ -127,17 +126,30 @@ export default class EditFormView extends AbstractStatefulView {
   #destination = null;
   #offers = null;
 
+  #datepicker = null;
+
   constructor(point, destination, offers) {
     super();
     this._state = EditFormView.parsePointToState(point);
     this.#destination = destination;
     this.#offers = offers;
     this.#setInnerHandlers();
+    this.#setDatepickerFrom();
+    this.#setDatepickerTo();
   }
 
   get template() {
     return createEditFormTemplate(this._state, this.#destination, this.#offers);
   }
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#datepicker) {
+      this.#datepicker.destroy();
+      this.#datepicker = null;
+    }
+  };
 
   setCloseClickHandler = (callback) => {
     this._callback.closeClick = callback;
@@ -159,6 +171,8 @@ export default class EditFormView extends AbstractStatefulView {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setCloseClickHandler(this._callback.closeClick);
+    this.#setDatepickerFrom();
+    this.#setDatepickerTo();
   };
 
   #pointDestinationChangeHandler = (evt) => {
@@ -212,6 +226,48 @@ export default class EditFormView extends AbstractStatefulView {
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#pointDestinationChangeHandler);
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChangeHandler);
     this.element.querySelector('.event__input--price').addEventListener('change', this.#pointPriceChangeHandler);
+  };
+
+  #setDatepickerFrom = () => {
+    if (this._state.dateFrom) {
+      this.#datepicker = flatpickr(
+        this.element.querySelector('#event-start-time-1'),
+        {
+          enableTime: true,
+          dateFormat: 'd/m/y H:i',
+          defaultDate: this._state.dateFrom,
+          maxDate: this._state.dateTo,
+          onChange: this.#pointFromDateChangeHandler,
+        },
+      );
+    }
+  };
+
+  #setDatepickerTo = () => {
+    if (this._state.dateTo) {
+      this.#datepicker = flatpickr(
+        this.element.querySelector('#event-end-time-1'),
+        {
+          enableTime: true,
+          dateFormat: 'd/m/y H:i',
+          defaultDate: this._state.dateTo,
+          minDate: this._state.dateFrom,
+          onChange: this.#pointToDateChangeHandler,
+        },
+      );
+    }
+  };
+
+  #pointFromDateChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate,
+    });
+  };
+
+  #pointToDateChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateTo: userDate,
+    });
   };
 
   static parsePointToState = (point) => ({
