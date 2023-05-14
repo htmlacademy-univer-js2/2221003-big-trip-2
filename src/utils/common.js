@@ -24,10 +24,4 @@ const updateItem = (items, update) => {
   ];
 };
 
-const doCapitalizeString = (string) => {
-  const capFirstString = string[0].toUpperCase();
-  const restOfString = string.slice(1);
-  return capFirstString + restOfString;
-};
-
-export { getRandomPositiveInteger, updateItem, getRandomArrayElement, isEscKeyDown, doCapitalizeString };
+export { getRandomPositiveInteger, updateItem, getRandomArrayElement, isEscKeyDown };
