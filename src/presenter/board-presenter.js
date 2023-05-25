@@ -92,7 +92,7 @@ export default class TripPresenter {
   };
 
   #clearAll = ({ resetSortType = false } = {}) => {
-    // this.#pointNewPresenter.destroy();
+    this.#pointNewPresenter.destroy();
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
 

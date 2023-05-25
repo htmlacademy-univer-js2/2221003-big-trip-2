@@ -37,7 +37,3 @@ const handleNewPointButtonClick = () => {
 
 render(newPointButtonComponent, siteHeaderElement);
 newPointButtonComponent.setClickHandler(handleNewPointButtonClick);
-
-// const filters = generateFilter(pointsModel.points);
-
-// render(new FilterView(filters), siteHeaderElement.querySelector('.trip-controls__filters'));

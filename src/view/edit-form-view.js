@@ -215,17 +215,16 @@ export default class EditFormView extends AbstractStatefulView {
 
   #offersChangeHandler = (evt) => {
     evt.preventDefault();
-    const offerId = Number(evt.target.id.slice(-1));
-    const offerIds = this._state.offerIds.filter((n) => n !== offerId);
-    let currentOfferIds = [...this._state.offerIds];
-    if (offerIds.length !== this._state.offerIds.length) {
-      currentOfferIds = offerIds;
+    const ids = this._state.offerIds.filter((n) => n !== Number(evt.target.id.slice(-1)));
+    let currentIds = [...this._state.offerIds];
+    if (ids.length !== this._state.offerIds.length) {
+      currentIds = ids;
     }
     else {
-      currentOfferIds.push(offerId);
+      currentIds.push(Number(evt.target.id.slice(-1)));
     }
     this._setState({
-      offerIds: currentOfferIds
+      offerIds: currentIds
     });
   };
 
