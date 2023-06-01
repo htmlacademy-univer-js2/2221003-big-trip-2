@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { POINT_TYPES } from '../mock/constants.js';
 import { getDateTime } from '../utils/point.js';
@@ -19,56 +18,37 @@ const BLANK_POINT = {
 };
 
 const renderPictures = (pictures) => {
-  if (pictures.length === 0) {
-    return '';
-  }
-  return pictures.map((picture) => `<img class="event__photo"
-  src="${picture.src}" alt="${picture.description}">`).join('');
+  let result = '';
+  pictures.forEach((picture) => {
+    result = `${result}<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
+  });
+  return result;
 };
 
 const renderNames = (destinations) => {
-  if (destinations.length === 0) {
-    return '';
-  }
-  return destinations.map((destination) => `<option value="${destination.name}">
-  </option>`).join('');
+  let result = '';
+  destinations.forEach((destination) => {
+    result = `${result}
+    <option value="${destination.name}"></option>`;
+  });
+  return result;
 };
 
-const renderOffers = (allOffers, checkedOffers) => allOffers.map((offer) => `<div class="event__offer-selector">
-<input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-luggage" ${checkedOffers.includes(offer.id) ? 'checked' : ''}>
-<label class="event__offer-label" for="event-offer-${offer.id}">
-  <span class="event__offer-title">${offer.title}</span>
-  &plus;&euro;&nbsp;
-  <span class="event__offer-price">${offer.price}</span>
-</label>
-</div>`).join('');
-
-const renderOffersContainer = (allOffers, checkedOffers) => {
-  if (!allOffers || allOffers.offers.length === 0) {
-    return '';
-  }
-
-  return `<section class="event__section  event__section--offers">
-  <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-  <div class="event__available-offers">
-  ${renderOffers(allOffers.offers, checkedOffers)}
-  </div>
-  </section>`;
-};
-
-const renderDestinationContainer = (destination) => {
-  if (destination) {
-    return `<section class="event__section  event__section--destination">
-    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${destination.description !== null ? destination.description : ''}</p>
-    <div class="event__photos-container">
-                <div class="event__photos-tape">
-                ${renderPictures(destination.pictures)}
-                </div>
-              </div>
-  </section>`;
-  }
-  return '';
+const renderOffers = (allOffers, checkedOffers) => {
+  let result = '';
+  allOffers.forEach((offer) => {
+    const checked = checkedOffers.includes(offer.id) ? 'checked' : '';
+    result = `${result}
+    <div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}" type="checkbox" name="event-offer-luggage" ${checked}>
+      <label class="event__offer-label" for="event-offer-${offer.id}">
+        <span class="event__offer-title">${offer.title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offer.price}</span>
+      </label>
+    </div>`;
+  });
+  return result;
 };
 
 const renderDate = (dateFrom, dateTo) => (
@@ -83,13 +63,13 @@ const renderDate = (dateFrom, dateTo) => (
 
 const renderType = (currentType) => Object.values(POINT_TYPES).map((type) => `<div class="event__type-item">
 <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${currentType === type ? 'checked' : ''}>
-<label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type[0].toUpperCase() + type.slice(1)}</label>
+<label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
 </div>`).join('');
 
 const createEditFormTemplate = (point, destinations, allOffers, isNewPoint) => {
   const { basePrice, type, destination, dateFrom, dateTo, offers } = point;
   const offersByType = allOffers.find((offer) => offer.type === type);
-  const destinationData = destinations.find((item) => item.id === destination);
+  const currentDestination = destinations.find((item) => item.id === destination);
 
   return (`<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -111,7 +91,7 @@ const createEditFormTemplate = (point, destinations, allOffers, isNewPoint) => {
         <label class="event__label  event__type-output" for="event-destination-${destination}">
         ${type}
         </label>
-        <input class="event__input event__input--destination" id="event-destination-${destination}" type="text" name="event-destination" value="${destinationData ? he.encode(destinationData.name) : ''}" list="destination-list-1">
+        <input class="event__input event__input--destination" id="event-destination-${destination}" type="text" name="event-destination" value="${currentDestination ? he.encode(currentDestination.name) : ''}" list="destination-list-1">
         <datalist id="destination-list-1">
           ${renderNames(destinations)}
         </datalist>
@@ -133,10 +113,24 @@ const createEditFormTemplate = (point, destinations, allOffers, isNewPoint) => {
       </button>
     </header>
     <section class="event__details">
+
       <section class="event__section  event__section--offers">
-        ${renderOffersContainer(offersByType, offers)}
-        ${renderDestinationContainer(destinationData)}
+        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+        <div class="event__available-offers">
+        ${renderOffers(offersByType.offers, offers)}
+        </div>
       </section>
+
+      ${currentDestination ? `<section class="event__section  event__section--destination">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">${currentDestination.description}</p>
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            ${renderPictures(currentDestination.pictures)}
+          </div>
+        </div>
+      </section>` : ''}
+    </section>
   </form>
 </li>`);
 };
@@ -283,7 +277,7 @@ export default class EditFormView extends AbstractStatefulView {
         {
           enableTime: true,
           dateFormat: 'd/m/y H:i',
-          time_24hr: true,
+          'time_24hr': true,
           defaultDate: this._state.dateFrom,
           onChange: this.#pointFromDateChangeHandler,
         },
@@ -298,7 +292,7 @@ export default class EditFormView extends AbstractStatefulView {
         {
           enableTime: true,
           dateFormat: 'd/m/y H:i',
-          time_24hr: true,
+          'time_24hr': true,
           defaultDate: this._state.dateTo,
           minDate: this._state.dateFrom,
           onChange: this.#pointToDateChangeHandler,
