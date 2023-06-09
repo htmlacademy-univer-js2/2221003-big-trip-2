@@ -8,10 +8,10 @@ import he from 'he';
 import 'flatpickr/dist/flatpickr.min.css';
 
 const BLANK_POINT = {
-  basePrice: 0,
+  basePrice: 100,
   dateFrom: dayjs(),
   dateTo: dayjs().add(7, 'day'),
-  destination: 0,
+  destination: 1,
   isFavorite: false,
   offers: [],
   type: POINT_TYPES.TAXI,
