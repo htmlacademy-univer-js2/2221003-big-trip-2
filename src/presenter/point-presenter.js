@@ -16,16 +16,14 @@ export default class PointPresenter {
   #pointComponent = null;
   #pointEditComponent = null;
 
-  #pointsModel = null;
   #destinationsModel = null;
   #offersModel = null;
 
   #destinations = null;
   #offers = null;
 
-  constructor(pointsListContainer, pointsModel, changeData, changeMode, destinationsModel, offersModel) {
+  constructor(pointsListContainer, changeData, changeMode, destinationsModel, offersModel) {
     this.#pointsListContainer = pointsListContainer;
-    this.#pointsModel = pointsModel;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
     this.#destinationsModel = destinationsModel;
@@ -66,7 +64,8 @@ export default class PointPresenter {
     }
 
     if (this.#mode === Mode.EDITING) {
-      replace(this.#pointEditComponent, prevPointEditComponent);
+      replace(this.#pointComponent, prevPointEditComponent);
+      this.#mode = Mode.DEFAULT;
     }
 
     remove(prevPointComponent);
@@ -82,6 +81,24 @@ export default class PointPresenter {
     if (this.#mode !== Mode.DEFAULT) {
       this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
+    }
+  };
+
+  setSaving = () => {
+    if (this.#mode === Mode.EDITING) {
+      this.#pointEditComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
+  };
+
+  setDeleting = () => {
+    if (this.#mode === Mode.EDITING) {
+      this.#pointEditComponent.updateElement({
+        isDisabled: true,
+        isDeleting: true,
+      });
     }
   };
 
@@ -115,7 +132,6 @@ export default class PointPresenter {
       UpdateType.MINOR,
       point,
     );
-    this.#replaceFormToPoint();
   };
 
   #handleCloseClick = () => {

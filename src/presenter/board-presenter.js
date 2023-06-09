@@ -36,7 +36,7 @@ export default class TripPresenter {
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
 
-    this.#pointNewPresenter = new PointNewPresenter(this.#pointsListComponent.element, this.#handleViewAction, this.#pointsModel, this.#destinationsModel, this.#offersModel);
+    this.#pointNewPresenter = new PointNewPresenter(this.#pointsListComponent.element, this.#handleViewAction, this.#destinationsModel, this.#offersModel);
 
     this.#destinationsModel.addObserver(this.#handleModelEvent);
     this.#offersModel.addObserver(this.#handleModelEvent);
@@ -92,7 +92,7 @@ export default class TripPresenter {
 
   #renderPoint = (point) => {
     const pointPresenter = new PointPresenter(
-      this.#pointsListComponent.element, this.#pointsModel, this.#handleViewAction, this.#handleModeChange, this.#destinationsModel, this.#offersModel
+      this.#pointsListComponent.element, this.#handleViewAction, this.#handleModeChange, this.#destinationsModel, this.#offersModel
     );
 
     pointPresenter.init(point);
@@ -146,12 +146,15 @@ export default class TripPresenter {
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
+        this.#pointPresenter.get(update.id).setSaving();
         this.#pointsModel.updatePoint(updateType, update);
         break;
       case UserAction.ADD_POINT:
+        this.#pointPresenter.setSaving();
         this.#pointsModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE_POINT:
+        this.#pointPresenter.get(update.id).setDeleting();
         this.#pointsModel.deletePoint(updateType, update);
         break;
     }

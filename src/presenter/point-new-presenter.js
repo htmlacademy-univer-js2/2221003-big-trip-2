@@ -2,7 +2,6 @@ import { render, remove, RenderPosition } from '../framework/render.js';
 import EditFormView from '../view/edit-form-view.js';
 import { isEscKeyDown } from '../utils/common.js';
 import { UpdateType, UserAction } from '../mock/constants.js';
-import { nanoid } from 'nanoid';
 
 export default class PointNewPresenter {
 
@@ -12,17 +11,15 @@ export default class PointNewPresenter {
   #destroyCallback = null;
   #pointEditComponent = null;
 
-  #pointsModel = null;
   #destinationsModel = null;
   #offersModel = null;
 
   #destinations = null;
   #offers = null;
 
-  constructor(pointsListContainer, changeData, pointsModel, destinationsModel, offersModel) {
+  constructor(pointsListContainer, changeData, destinationsModel, offersModel) {
     this.#pointsListContainer = pointsListContainer;
     this.#changeData = changeData;
-    this.#pointsModel = pointsModel;
     this.#destinationsModel = destinationsModel;
     this.#offersModel = offersModel;
   }
@@ -59,6 +56,13 @@ export default class PointNewPresenter {
     document.removeEventListener('keydown', this.#onEscKeyDown);
   };
 
+  setSaving = () => {
+    this.#pointEditComponent.updateElement({
+      isDisabled: true,
+      isSaving: true,
+    });
+  };
+
   #onEscKeyDown = (evt) => {
     if (isEscKeyDown(evt)) {
       evt.preventDefault();
@@ -70,9 +74,9 @@ export default class PointNewPresenter {
     this.#changeData(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-      { id: nanoid(), ...point },
+      point,
     );
-    this.destroy();
+    // this.destroy();
   };
 
   #handleDeleteClick = () => {

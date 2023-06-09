@@ -17,6 +17,28 @@ export default class PointsApiService extends ApiService {
       .then(ApiService.parseResponse);
   }
 
+  addPoint = async (point) => {
+    const response = await this._load({
+      url: 'points',
+      method: Method.POST,
+      body: JSON.stringify(this.#adaptToServer(point)),
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+    });
+
+    const parsedResponse = await ApiService.parseResponse(response);
+
+    return parsedResponse;
+  };
+
+  deletePoint = async (point) => {
+    const response = await this._load({
+      url: `points/${point.id}`,
+      method: Method.DELETE,
+    });
+
+    return response;
+  };
+
   updatePoint = async (point) => {
     const response = await this._load({
       url: `points/${point.id}`,
@@ -30,31 +52,31 @@ export default class PointsApiService extends ApiService {
     return parsedResponse;
   };
 
-  updateOffer = async (offer) => {
-    const response = await this._load({
-      url: `offers/${offer.type}`,
-      method: Method.PUT,
-      body: JSON.stringify(offer),
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-    });
+  // updateOffer = async (offer) => {
+  //   const response = await this._load({
+  //     url: `offers/${offer.type}`,
+  //     method: Method.PUT,
+  //     body: JSON.stringify(offer),
+  //     headers: new Headers({ 'Content-Type': 'application/json' }),
+  //   });
 
-    const parsedResponse = await ApiService.parseResponse(response);
+  //   const parsedResponse = await ApiService.parseResponse(response);
 
-    return parsedResponse;
-  };
+  //   return parsedResponse;
+  // };
 
-  updateDestination = async (destination) => {
-    const response = await this._load({
-      url: `destinations/${destination.id}`,
-      method: Method.PUT,
-      body: JSON.stringify(destination),
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-    });
+  // updateDestination = async (destination) => {
+  //   const response = await this._load({
+  //     url: `destinations/${destination.id}`,
+  //     method: Method.PUT,
+  //     body: JSON.stringify(destination),
+  //     headers: new Headers({ 'Content-Type': 'application/json' }),
+  //   });
 
-    const parsedResponse = await ApiService.parseResponse(response);
+  //   const parsedResponse = await ApiService.parseResponse(response);
 
-    return parsedResponse;
-  };
+  //   return parsedResponse;
+  // };
 
   #adaptToServer = (point) => {
     const adaptedPoint = {

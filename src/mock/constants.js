@@ -74,6 +74,8 @@ const UserAction = {
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE'
 };
 
 const Mode = {
@@ -81,4 +83,10 @@ const Mode = {
   EDITING: 'EDITING'
 };
 
-export { POINT_TYPES, OFFER_TITLES, DESCRIPTIONS, DESTINATIONS_NAMES, tripPrice, offerPrice, FilterType, SortType, picturesCount, maxPoints, UpdateType, UserAction, Method, Mode };
+const AUTHORIZATION = 'Basic qN3Fsq43cwa4xj3z1';
+const END_POINT = 'https://18.ecmascript.pages.academy/big-trip';
+
+export {
+  POINT_TYPES, OFFER_TITLES, DESCRIPTIONS, DESTINATIONS_NAMES, tripPrice, offerPrice, FilterType, SortType, picturesCount,
+  maxPoints, UpdateType, UserAction, Method, Mode, AUTHORIZATION, END_POINT
+};
