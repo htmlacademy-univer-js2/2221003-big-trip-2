@@ -5,7 +5,7 @@ import PointsModel from './model/points-model.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import NewPointButtonView from './view/new-point-button-view.js';
-import PointsApiService from './points-api-service.js'; //
+import PointsApiService from './points-api-service.js';
 import OffersModel from './model/offers-model.js';
 import DestinationsModel from './model/destinations-model.js';
 import { AUTHORIZATION, END_POINT } from './mock/constants.js';
