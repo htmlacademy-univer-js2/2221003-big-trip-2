@@ -27,7 +27,7 @@ const DESCRIPTIONS = [
 
 const DESTINATIONS_NAMES = ['Ekaterinburg', 'Chelyabinsk', 'Berezovski', 'Moscow', 'Saint-Petersburg', 'Kazan', 'Toronto', 'Washington', 'Raleigh', 'Paris', 'Rim'];
 
-const AUTHORIZATION = 'Basic qN3Fsq43cwa4xj3z1';
+const AUTHORIZATION = 'Basic qN3Fsq43cwa4xj3z2';
 const END_POINT = 'https://18.ecmascript.pages.academy/big-trip';
 
 const offerPrice = {
