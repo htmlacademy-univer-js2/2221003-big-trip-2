@@ -24,7 +24,7 @@ const filterModel = new FilterModel();
 const filterPresenter = new FilterPresenter(siteHeaderElement.querySelector('.trip-controls__filters'), filterModel, pointsModel);
 filterPresenter.init();
 
-const tripPresenter = new TripPresenter(siteMainElement.querySelector('.trip-events'), pointsModel, filterModel, destinationsModel, offersModel);
+const tripPresenter = new TripPresenter(siteHeaderElement.querySelector('.trip-main__trip-info'), siteMainElement.querySelector('.trip-events'), pointsModel, filterModel, destinationsModel, offersModel);
 tripPresenter.init();
 
 const handleNewPointFormClose = () => {
